@@ -6,7 +6,7 @@ function getProductsByCategory($pdo, $categoryId)
         SELECT * FROM products 
         WHERE category_id = :cat_id 
         AND is_active = TRUE 
-        ORDER BY created_at DESC
+        ORDER BY id DESC
     ");
     $stmt->execute(['cat_id' => $categoryId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -20,9 +20,18 @@ function displayProductCard($item)
             alt="<?php echo htmlspecialchars($item['name']); ?>">
         <h3><?php echo htmlspecialchars($item['name']); ?></h3>
         <p class="price">KES <?php echo number_format($item['price'], 0); ?></p>
-        <button class="add-to-cart-btn" data-id="<?php echo $item['id']; ?>">
+        <button class="add-to-cart-btn" data-id="<?php echo htmlspecialchars($item['id']); ?>">
             Add to Cart
         </button>
     </div>
 <?php
+}
+function checkAdminSession()
+{
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+        header("Location: login.php");
+    }
 }
