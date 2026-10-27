@@ -1,0 +1,21 @@
+body { font-family: system-ui, sans-serif; margin: 0; background: #f5f6f8; }
+.admin-bar { display: flex; justify-content: space-between; padding: 1rem 2rem; background: #1f2937; color: #fff; }
+.admin-bar a { color: #fff; margin-left: 1rem; text-decoration: none; }
+.admin-main { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.stat { background: #fff; padding: 1rem; border-radius: 8px; }
+.stat span { display: block; font-size: 1.8rem; font-weight: 700; }
+table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; }
+th, td { padding: .7rem; text-align: left; border-bottom: 1px solid #eee; }
+tr.inactive { opacity: .5; }
+td.low { color: #b91c1c; font-weight: 700; }
+.actions { display: flex; gap: .5rem; align-items: center; }
+.actions form { margin: 0; }
+button, .actions a { padding: .3rem .7rem; cursor: pointer; }
+button.danger { background: #b91c1c; color: #fff; border: 0; border-radius: 4px; }
+.flash { background: #d1fae5; padding: .7rem; border-radius: 6px; }
+.error { background: #fee2e2; padding: .7rem; border-radius: 6px; }
+.product-form { display: grid; gap: 1rem; max-width: 500px; }
+.product-form label { display: grid; gap: .3rem; }
+.login-page { display: grid; place-items: center; height: 100vh; }
+.login-box { background: #fff; padding: 2rem; border-radius: 8px; display: grid; gap: 1rem; width: 300px; }

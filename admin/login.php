@@ -1,87 +1,34 @@
 <?php
 session_start();
-require_once "../includes/db.php";
+require_once '../includes/db.php';
 
-if (isset($_POST['login'])) {
+$error = '';
 
-    $username = trim($_POST['username']);
-    $password = $_POST['password'];}
-
-   try{
-    $stmt = $pdo->prepare("SELECT * FROM admins WHERE username = ?");
-    $stmt->execute([$username]);
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $stmt = $pdo->prepare("SELECT * FROM admins WHERE email = ?");
+    $stmt->execute([trim($_POST['email'] ?? '')]);
     $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($admin) {
-
-        if (password_verify($password, $admin['password'])) {
-
-            $_SESSION['admin_logged_in'] = true;
-            $_SESSION['admin_username'] = $admin['username'];
-
-            header("Location: dashboard.php");
-            exit;
-
-        } else {
-
-            echo "Incorrect Password!";
-
-        }
-
-    } else {
-
-        echo "Username not found!";
-
+    if ($admin && password_verify($_POST['password'] ?? '', $admin['password_hash'])) {
+        session_regenerate_id(true);
+        $_SESSION['admin_id']   = $admin['id'];
+        $_SESSION['admin_name'] = $admin['name'];
+        header('Location: dashboard.php');
+        exit;
     }
-}
-catch(PDOException $e){
-    $error_message ="Database Error:" . $e->getMessage();
+    $error = 'Invalid email or password.';
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MtaaMarket - Admin Login</title>
-
-    <link rel="stylesheet" href="../assets/css/styles.css">
-</head>
-<body>
-
-<div class="card">
-    <h1>Admin Login</h1>
-
-    <p>Sign in to manage your storefront inventory.</p>
-     <?php if(!empty($error_message)):?>
-        <?php endif; ?>
-    <form action="" method="POST">
-
-        <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            required>
-
-        <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            required>
-
-        <button type="submit" name="login">
-            Login
-        </button>
-
+<html>
+<head><title>Admin Login</title><link rel="stylesheet" href="admin.css"></head>
+<body class="login-page">
+    <form method="POST" class="login-box">
+        <h1>Admin Login</h1>
+        <?php if ($error): ?><p class="error"><?= htmlspecialchars($error) ?></p><?php endif; ?>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Log in</button>
     </form>
-
-</div>
-            
-
-
-
-</div>
-
 </body>
 </html>
